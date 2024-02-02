@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "progress": 0.0,
+    "value": 1,
+    "title": "Champion Scroll",
+    "desc": "Any champion scroll. Make sure to screenshot!",
+    "image": "Bonus_1.png"
+  },
+  {
+    "id": 2,
+    "progress": 0.0,
+    "value": 2,
+    "title": "Placeholder Bonus",
+    "desc": "Placeholder Bonus Description",
+    "image": "Bonus_2.png"
+  }
+]

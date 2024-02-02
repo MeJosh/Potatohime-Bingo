@@ -42,6 +42,13 @@ export default {
 </script>
 
 <style scoped>
+
+.bingo-board {
+  padding: 20px;
+  background-color: rgba(100, 100, 100, 0.5);
+  border: 1px solid black;
+  border-radius: 2em;
+}
 .bingo-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

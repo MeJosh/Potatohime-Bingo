@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
-import bingoData from '@/assets/data/mockBingoData.json';
+import bingoData from '@/assets/data/bingoBoardData.json';
 
 export const useBingoBoardStore = defineStore('bingoBoard', () => {
   const board = [] as any[];
 
   function setBoard(newBoard: any[]) {
-    board.length = 0; // Clear the existing data
-    board.push(...newBoard); // Replace with new data
+    board.length = 0;
+    board.push(...newBoard);
   }
 
   // Load data from the JSON file and initialize the board property

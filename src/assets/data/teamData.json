@@ -1,0 +1,28 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "name": "tgfrcmesellg",
+      "points": 0,
+      "color": "#4287f5",
+      "members": [
+        "ka vi",
+        "widmee",
+        "Tarshak",
+        "Dunkus III"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "myrecuties",
+      "points": 0,
+      "color": "#42f54b",
+      "members": [
+        "Iron Mav1s",
+        "Catacendre",
+        "Pickled Nat",
+        "DummyPuppy"
+      ]
+    }
+  ]
+}

@@ -80,6 +80,10 @@ img {
   flex-direction: column;
   align-items: center;
   max-width: 380px;
+  padding: 20px;
+  background-color: rgba(100, 100, 100, 0.5);
+  border: 1px solid black;
+  border-radius: 2em;
 }
 
 .tile-progress {

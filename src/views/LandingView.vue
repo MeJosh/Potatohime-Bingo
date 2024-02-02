@@ -1,69 +1,66 @@
 <template>
-  <div class="landing-container">
-    <div class="left-column">
-      <div class="column-content"></div>
+  <div class="grid-container">
+    <div class="bingo-board-container">
+      <TeamDropdown />
+      <BingoBoard />
     </div>
-    <div class="center-column">
-      <div class="column-content">
-        <BingoBoard />
-      </div>
-    </div>
-    <div class="right-column">
-      <div class="column-content">
-        <TileDetails />
-      </div>
+    <div class="tile-details-container">
+      <TileDetails />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import BingoBoard from '@/components/BingoBoard.vue';
-import TileDetails from '@/components/TileDetails.vue';
+import BingoBoard from "@/components/BingoBoard.vue";
+import TileDetails from "@/components/TileDetails.vue";
+import TeamDropdown from "@/components/TeamDropdown.vue";
+import { useTeamStore } from "@/stores/teams";
+import { useBingoBoardStore } from "@/stores/bingoBoard";
+
 
 export default {
   components: {
     BingoBoard,
     TileDetails,
+    TeamDropdown,
   },
+  methods: {
+    fetchData() {
+      const teamStore = useTeamStore();
+      const bingoBoardStore = useBingoBoardStore();
+      bingoBoardStore.initializeBoardData();
+    }
+  },
+  mounted() {
+    this.fetchData();
+  }
 };
 </script>
 
 <style>
-.landing-container {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.left-column,
-.center-column,
-.right-column {
-  display: flex;
-  flex-direction: column;
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  height: 100vh;
+  gap: 20px;
 }
 
-.left-column {
-  width: 10px;
-  max-width: 10px;
+.bingo-board-container {
+  text-align: center;
 }
 
-.right-column {
-  min-width: 400px;
-}
+@media screen and (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    justify-content: center;
+    text-align: center;
+  }
 
-.center-column {
-  flex-grow: 1;
-}
-
-.column-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
+  .tile-details-container {
+    margin: 0 auto;
+  }
 }
 </style>
+@/stores/teams
