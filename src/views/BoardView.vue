@@ -1,21 +1,11 @@
 <template>
   <div class="grid-container">
     <div v-if="isDataLoaded" class="bingo-board-container">
-      <div class="team-title"> {{ teamName }} Bonus Points</div>
-      <div class="info">The bonus items only give points once per item (per team) good luck!</div>
-      <table class="table">
-        <tbody>
-          <tr v-for="item in bonuses" :key="item.id">
-            <td>
-              <img :src="getImageUrl(item.image)" alt="Tile Image" class="icon-layer" />
-              <img src="@/assets/images/check_green.png" v-if="item.progress >= 1" alt="Green Check" class="checkmark" />
-            </td>
-            <td>{{ item.title }}</td>
-            <td>{{ item.desc }}</td>
-            <td class="item-points">{{ item.value }}pt</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="team-title" v-if="isTeamBoard"> {{ teamName }} Board</div>
+      <BingoBoard :teamId="teamId"/>
+    </div>
+    <div v-if="isDataLoaded" class="tile-details-container">
+      <TileDetails :teamId="teamId"/>
     </div>
     <div v-if="!isDataLoaded" class="loading">
       <div class="spinner"></div>
@@ -25,17 +15,33 @@
 </template>
 
 <script lang="ts">
+import BingoBoard from "@/components/BingoBoard.vue";
+import TileDetails from "@/components/TileDetails.vue";
 import { useTeamStore } from "@/stores/teams";
+import { useBingoBoardStore } from "@/stores/bingoBoard";
+
 
 export default {
+  components: {
+    BingoBoard,
+    TileDetails,
+  },
   methods: {
-    getImageUrl(imageName: string) {
-      return new URL(`../assets/images/bonus_items/${imageName}`, import.meta.url).href;
-    },
+    fetchData() {
+      const teamStore = useTeamStore();
+      teamStore.fetchTeams();
+      console.log(teamStore.teams);
+
+      const bingoBoardStore = useBingoBoardStore();
+      bingoBoardStore.initializeBoardData();
+    }
   },
   computed: {
     isDataLoaded() {
       return useTeamStore().loaded;
+    },
+    isTeamBoard() {
+      return this.$route.params.teamId != null;
     },
     teamId() {
       return this.$route.params.teamId;
@@ -54,22 +60,11 @@ export default {
         }
       }
       return "";
-    },
-    bonuses() {
-      if (this.teamId == null) {
-        return [];
-      }
-      
-      const teamStore = useTeamStore();
-      const teamId = parseInt(this.teamId as string);
-      if (teamStore.teamBonuses.length >= teamId - 1) {
-        const board = teamStore.teamBonuses[teamId - 1];
-        return board;
-      }
-
-      return [];
     }
   },
+  mounted() {
+    this.fetchData();
+  }
 };
 </script>
 
@@ -91,18 +86,6 @@ export default {
   font-size: 3em;
 }
 
-.table {
-  margin-top: 20px;
-  width: 100%;
-  min-width: 900px;
-  border-collapse: collapse;
-}
-
-.table td {
-  padding: 10px; /* Adjust padding as needed for spacing */
-  vertical-align: middle; /* Center content vertically within table cells */
-}
-
 @media screen and (max-width: 768px) {
   .grid-container {
     grid-template-columns: 1fr;
@@ -114,20 +97,6 @@ export default {
     margin: 0 auto;
   }
 }
-
-img {
-  height: 60px;
-}
-
-.item-points {
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.checkmark {
-  height: 40px;
-}
-
 .spinner {
   width: 40px;
   height: 40px;

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LandingView from '../views/LandingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,17 +6,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'landing',
-      component: LandingView
+      component: () => import ("@/views/LeaderboardView.vue")
     },
     {
-      path: '/bonus',
-      name: 'bonus',
-      component: () => import("../views/BonusPointsView.vue")
+      path: '/bonuses/:teamId',
+      name: 'team-bonuses',
+      component: () => import("@/views/BonusPointsView.vue")
     },
     {
-      path: '/rules',
-      name: 'rules',
-      component: () => import("../views/RulesView.vue")
+      path: '/board',
+      name: 'board',
+      component: () => import("@/views/BoardView.vue")
+    },
+    {
+      path: '/boards/:teamId',
+      name: 'team-board',
+      component: () => import("@/views/BoardView.vue")
     }
   ]
 })

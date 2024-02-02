@@ -21,23 +21,33 @@
 
 <script lang="ts">
 import BingoTile from '@/components/BingoTile.vue';
-import { useBingoBoardStore } from '@/stores/bingoBoard';
+import { useTeamStore } from '@/stores/teams';
+import { type PropType } from 'vue';
 
 export default {
+  props: {
+    teamId: String as PropType<string>,
+  },
   components: {
     BingoTile,
   },
-  setup() {
-    const bingoBoardStore = useBingoBoardStore();
+  computed: {
+    board() {
+      if (this.teamId == null) {
+        return [];
+      }
+      
+      const teamStore = useTeamStore();
+      const teamId = parseInt(this.teamId);
+      if (teamStore.teamBoards.length >= teamId - 1) {
+        const board = teamStore.teamBoards[teamId - 1];
+        return board;
+      }
 
-    // Use a computed property to get the board data
-    const board = bingoBoardStore.board;
-    bingoBoardStore.initializeBoardData();
-
-    return {
-      board,
-    };
+      return [];
+    }
   },
+  methods: {}
 };
 </script>
 
@@ -54,4 +64,5 @@ export default {
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
+
 </style>

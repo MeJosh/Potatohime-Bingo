@@ -33,7 +33,7 @@ export default defineComponent({
     toggleDropdown() {
       this.isActive = !this.isActive; // Toggle the dropdown open/close
     },
-    selectTeam(teamName) {
+    selectTeam(teamName: string) {
       this.isActive = false; // Close the dropdown when a team is selected
       console.log(teamName);
     },

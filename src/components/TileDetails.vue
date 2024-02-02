@@ -2,28 +2,27 @@
 <div v-if="selectedId != null" class="tile-details">
   <div class="tile-progress">
     <img :src="getImageUrl()" alt="Tile Image" class="icon-layer" />
-
-      <!-- <p>Progress PvM: {{ selectedTile.progress_pvm }}</p>
-      <p>Progress Skilling: {{ selectedTile.progress_skilling }}</p> -->
     </div>
 
     <div class="tile-pvm">
       <div class="title-section">
-        <p>{{ selectedTile.title_pvm }}</p>
+        <p>{{ selectedTile?.title_pvm }}</p>
+        <img src="@/assets/images/check_green.png" v-if="selectedTile?.progress_pvm >= 1" alt="Green Check" class="checkmark" />
       </div>
-
+      
       <div class="details-section">
-        <p>{{ selectedTile.desc_pvm }}</p>
+        <p>{{ selectedTile?.desc_pvm }}</p>
       </div>
     </div>
-
+    
     <div class="tile-skill">
       <div class="title-section">
-        <p>{{ selectedTile.title_skilling }}</p>
+        <p>{{ selectedTile?.title_skilling }}</p>
+        <img src="@/assets/images/check_green.png" v-if="selectedTile?.progress_skilling >= 1" alt="Green Check" class="checkmark" />
       </div>
 
       <div class="details-section">
-        <p>{{ selectedTile.desc_skilling }}</p>
+        <p>{{ selectedTile?.desc_skilling }}</p>
       </div>
     </div>
 </div>
@@ -32,19 +31,41 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useSelectedTileStore } from '@/stores/selectedTile';
-import { useBingoBoardStore } from '@/stores/bingoBoard';
+import { useTeamStore } from '@/stores/teams';
+import { type PropType } from 'vue';
 
+
+  
 export default defineComponent({
+  props: {
+    teamId: String as PropType<string>,
+  },
   computed: {
     selectedId(): number | null {
       const selectedTileStore = useSelectedTileStore();
       return selectedTileStore.selectedId;
     },
-    selectedTile(): any | null {
-      const bingoBoardStore = useBingoBoardStore();
+    board() {
+      if (this.teamId == null) {
+        return [];
+      }
+      
+      const teamStore = useTeamStore();
+      const teamId = parseInt(this.teamId);
+      if (teamStore.teamBoards.length >= teamId - 1) {
+        const board = teamStore.teamBoards[teamId - 1];
+        return board;
+      }
 
+      return [];
+    },
+    selectedTile(): any | null {
       if (this.selectedId !== null) {
-        return bingoBoardStore.getTileById(this.selectedId);
+        for(const tile of this.board) {
+          if (tile.id == this.selectedId) {
+            return tile;
+          }
+        }
       }
 
       return {
@@ -59,7 +80,8 @@ export default defineComponent({
   },
   methods: {
     getImageUrl() {
-      if (this.selectedTile.image == null) {
+      console.log(this.selectedTile)
+      if (this.selectedTile?.image == null) {
         return new URL(`../assets/images/tiles/sample.png`, import.meta.url).href;
       }
       return new URL(`../assets/images/tiles/${this.selectedTile.image}`, import.meta.url).href;
@@ -118,10 +140,17 @@ img {
 .title-section {
   font-weight: bold;
   margin-bottom: 5px;
+  display: flex;
 }
 
 .details-section {
   text-align: center;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
 }
 </style>
   
