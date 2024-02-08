@@ -82,8 +82,13 @@ export default {
   text-align: center;
 }
 
+.loading {
+  color: white;
+}
+
 .team-title {
   font-size: 3em;
+  color: white;
 }
 
 @media screen and (max-width: 768px) {

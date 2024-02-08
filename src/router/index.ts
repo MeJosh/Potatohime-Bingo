@@ -5,7 +5,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'landing',
+      name: 'teams',
+      component: () => import ("@/views/TeamList.vue")
+    },
+    {
+      path: '/leaderboard',
+      name: 'leaderboard',
       component: () => import ("@/views/LeaderboardView.vue")
     },
     {

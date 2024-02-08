@@ -6,22 +6,38 @@
   </div>
   <div v-else class="data-container">
     <div class="team-graph">
-      <div class="title">Potatohime's BINGOOOOOOO Event!</div>
+      <div class="header">
+        <div class="title">
+          Potatohime's BINGOOOOOOO Event!
+        </div>
+        <div class="buttons">
+          <button class="button is-link" @click="goToTeamsList">Team List</button>
+          <button class="button is-link" @click="goToLeaderboard">Leaderboard</button>
+        </div>
+      </div>
+      <!-- <div class="title">Potatohime's BINGOOOOOOO Event!</div>
+        <div class="buttons">
+          <button class="button is-success" @click="goToLeaderboard">Leaderboard</button>
+          <button class="button is-success" @click="toToTeamList">Team List</button>
+        </div>
+      </div> -->
       <LeaderboardGraph />
     </div>
-    <div class="gap"></div>
-    <div class="team-table">
+    <!-- <div class="gap"></div> -->
+    <!-- <div class="team-table">
       <table class="table">
         <thead>
           <tr>
             <th class="header">Name</th>
+            <th class="header">Points</th>
             <th class="header">Members</th>
-            <th class="header">Scores</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="team in teams" :key="team.id">
             <td>{{ team.name }}</td>
+            <td>{{ team.points }}</td>
             <td>{{ team.members.join(", ") }}</td>
             <td>
               <div class="buttons">
@@ -32,7 +48,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div> -->
   </div>
 </div>
 </template>
@@ -67,6 +83,12 @@ export default {
     },
     selectTeamBonuses(teamId) {
       this.$router.push(`/bonuses/${teamId}`);
+    },
+    goToLeaderboard() {
+      this.$router.push("/leaderboard");
+    },
+    goToTeamsList() {
+      this.$router.push("/");
     }
   }
 };
@@ -78,11 +100,22 @@ export default {
   align-items: center; /* Center horizontally */
   justify-content: center; /* Center vertically */
   min-height: 100vh; /* Ensures the container takes at least the viewport height */
+  background-color: transparent;
+}
+
+.header {
+  text-align: center;
+}
+
+.buttons {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .title {
   text-align: center;
   font-size: 4em;
+  color: white;
 }
 
 .loading {
@@ -94,6 +127,7 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100%;
+  color: white;
 }
 
 .team-graph {

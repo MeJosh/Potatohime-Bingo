@@ -30,10 +30,11 @@ export default {
           },
           datalabels: {
             formatter: (value: number) => `${value} Pts`,
+            display: function (context: any) { return context.dataset.data[context.dataIndex] !== 0 },
             color: "#000000",
             size: "2em",
             anchor: "end",
-            align: "left",
+            align: "bottom",
             font: {
               weight: "bold",
               size: "16"
@@ -43,11 +44,17 @@ export default {
             display: false,
           }
         },
-        indexAxis: "y",
+        indexAxis: "x",
         scales: {
+          x: {
+            ticks: {
+              minRotation: 60,
+              maxRotation: 90,
+            }
+          },
           y: {
             min: 0,
-            max: useTeamStore().highestTeamScore() + 1,
+            max: Math.max(useTeamStore().highestTeamScore() + 1, 10),
           }
         }
       }
@@ -89,7 +96,7 @@ export default {
         }]
       };
     },
-  }
+  },
 }
 </script>
 <style>

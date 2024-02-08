@@ -1,14 +1,26 @@
 <template>
   <div class="grid-container">
-    <div v-if="isDataLoaded" class="bingo-board-container">
+    <div v-if="isDataLoaded" class="bonus-board-container">
       <div class="team-title"> {{ teamName }} Bonus Points</div>
-      <div class="info">The bonus items only give points once per item (per team) good luck!</div>
+      <div class="controls">
+        <div class="buttons">
+          <button class="button is-link" @click="goToTeamsList">Team List</button>
+          <button class="button is-link" @click="goToLeaderboard">Leaderboard</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="total-points">
+          Total Bonus Points Earned: <span class="item-points">{{ totalBonusPoints }}pts</span>
+        </div>
+        <div class="message">
+          The bonus items only give points once per item (per team) good luck!</div>
+        </div>
       <table class="table">
         <tbody>
-          <tr v-for="item in bonuses" :key="item.id">
+          <tr v-for="item in bonuses" :key="item.id" :class="{completed: item.progress >= 1}">
             <td>
-              <img :src="getImageUrl(item.image)" alt="Tile Image" class="icon-layer" />
               <img src="@/assets/images/check_green.png" v-if="item.progress >= 1" alt="Green Check" class="checkmark" />
+              <img :src="getImageUrl(item.image)" alt="Tile Image" class="icon-layer" />
             </td>
             <td>{{ item.title }}</td>
             <td>{{ item.desc }}</td>
@@ -32,6 +44,12 @@ export default {
     getImageUrl(imageName: string) {
       return new URL(`../assets/images/bonus_items/${imageName}`, import.meta.url).href;
     },
+    goToLeaderboard() {
+      this.$router.push("/leaderboard");
+    },
+    goToTeamsList() {
+      this.$router.push("/");
+    }
   },
   computed: {
     isDataLoaded() {
@@ -68,6 +86,15 @@ export default {
       }
 
       return [];
+    },
+    totalBonusPoints() {
+      let result = 0;
+      for (const bonus of this.bonuses) {
+        if (bonus.progress >= 1) {
+          result += bonus.value;
+        }
+      }
+      return result;
     }
   },
 };
@@ -83,12 +110,18 @@ export default {
   gap: 20px;
 }
 
-.bingo-board-container {
+.bonus-board-container {
   text-align: center;
+  margin: 10px;
 }
 
 .team-title {
   font-size: 3em;
+  color: white;
+}
+
+.buttons {
+  margin-top: 10px;
 }
 
 .table {
@@ -96,11 +129,25 @@ export default {
   width: 100%;
   min-width: 900px;
   border-collapse: collapse;
+  border: 2px solid black;
+}
+
+.loading {
+  color: white;
 }
 
 .table td {
   padding: 10px; /* Adjust padding as needed for spacing */
   vertical-align: middle; /* Center content vertically within table cells */
+}
+
+.total-points {
+  font-size: 2em;
+  color: black;
+}
+
+.completed {
+  background: lightgreen
 }
 
 @media screen and (max-width: 768px) {
@@ -119,13 +166,22 @@ img {
   height: 60px;
 }
 
+.info {
+  background-color: #f5f5f5;
+  border: 2px solid black;
+  margin-top: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .item-points {
-  font-size: 2em;
+  font-size: 2rem;
   font-weight: bold;
 }
 
 .checkmark {
   height: 40px;
+  margin-right: 10px;
 }
 
 .spinner {

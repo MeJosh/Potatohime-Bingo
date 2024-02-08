@@ -1,9 +1,16 @@
 <template>
-<div v-if="selectedId != null" class="tile-details">
-  <div class="tile-progress">
-    <img :src="getImageUrl()" alt="Tile Image" class="icon-layer" />
+<div v-if="selectedId != null">
+  <div class="controls">
+    <div class="buttons">
+      <button class="button is-link" @click="goToTeamsList">Team List</button>
+      <button class="button is-link" @click="goToLeaderboard">Leaderboard</button>
     </div>
-
+  </div>
+  <div class="tile-details">
+    <div class="tile-progress">
+      <img :src="getImageUrl()" alt="Tile Image" class="icon-layer" />
+    </div>
+    
     <div class="tile-pvm">
       <div class="title-section">
         <p>{{ selectedTile?.title_pvm }}</p>
@@ -11,6 +18,7 @@
       </div>
       
       <div class="details-section">
+        <p v-if="selectedTile?.total_pvm > 1">{{ selectedTile?.gained_pvm }} / {{ selectedTile?.total_pvm }}</p>
         <p>{{ selectedTile?.desc_pvm }}</p>
       </div>
     </div>
@@ -20,11 +28,13 @@
         <p>{{ selectedTile?.title_skilling }}</p>
         <img src="@/assets/images/check_green.png" v-if="selectedTile?.progress_skilling >= 1" alt="Green Check" class="checkmark" />
       </div>
-
+      
       <div class="details-section">
+        <p v-if="selectedTile?.total_skilling > 1">{{ selectedTile?.gained_skilling }} / {{ selectedTile?.total_skilling }}</p>
         <p>{{ selectedTile?.desc_skilling }}</p>
       </div>
     </div>
+  </div>
 </div>
 </template>
   
@@ -86,6 +96,12 @@ export default defineComponent({
       }
       return new URL(`../assets/images/tiles/${this.selectedTile.image}`, import.meta.url).href;
     },
+    goToLeaderboard() {
+      this.$router.push("/leaderboard");
+    },
+    goToTeamsList() {
+      this.$router.push("/");
+    }
   },
 });
 </script>
@@ -112,6 +128,11 @@ img {
   background-color: transparent;
   border: none;
 }
+
+.controls {
+  margin-bottom: 10px;
+}
+
 
 .tile-pvm {
   background-color: rgba(0, 0, 0, 0.7);
